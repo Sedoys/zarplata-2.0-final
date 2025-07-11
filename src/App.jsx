@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { saveAs } from "file-saver";
 import * as XLSX from "xlsx";
 
 function getCurrentWeekRange() {
@@ -98,7 +97,12 @@ export default function App() {
     XLSX.utils.book_append_sheet(wb, ws, "Выплаты");
     const buffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
     const blob = new Blob([buffer], { type: "application/octet-stream" });
-    saveAs(blob, "zarplata.xlsx");
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "zarplata.xlsx";
+    a.click();
+    window.URL.revokeObjectURL(url);
   };
 
   return (
